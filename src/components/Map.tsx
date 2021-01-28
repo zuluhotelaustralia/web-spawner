@@ -10,7 +10,6 @@ interface Props {
 }
 
 const Map: FC<Props> = ({ spawnData }) => {
-  console.log(spawnData)
   const bounds: LatLngTuple[] = [
     [0, 0],
     [-4096, 6144],
@@ -48,6 +47,12 @@ const Map: FC<Props> = ({ spawnData }) => {
             <Popup>
               <p>
                 <b>Num Entries: {spawn.count}</b>
+              </p>
+              <p>
+                <b>Home Range: {spawn.homeRange}</b>
+              </p>
+              <p>
+                <b>Walking Range: {spawn.walkingRange}</b>
               </p>
               <table className="table-auto">
                 <thead>
