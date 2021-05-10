@@ -1,0 +1,25 @@
+[
+  {
+    "type": "Spawner",
+    "location": [2799, 2310, 0],
+    "map": "Shalanaar",
+    "count": 11,
+    "entries": [
+      { "maxCount": 1, "name": "AirElemental", "probability": 100 },
+      { "maxCount": 1, "name": "Corpser", "probability": 100 },
+      { "maxCount": 1, "name": "DireWolf", "probability": 100 },
+      { "maxCount": 1, "name": "Ettin", "probability": 100 },
+      { "maxCount": 1, "name": "Gargoyle", "probability": 100 },
+      { "maxCount": 1, "name": "Gazer", "probability": 100 },
+      { "maxCount": 1, "name": "Harpy", "probability": 100 },
+      { "maxCount": 1, "name": "SnowOrc", "probability": 100 },
+      { "maxCount": 1, "name": "Reaper", "probability": 100 },
+      { "maxCount": 1, "name": "Troll", "probability": 100 },
+      { "maxCount": 1, "name": "WaterElemental", "probability": 100 }
+    ],
+    "homeRange": 20,
+    "walkingRange": 4,
+    "maxDelay": "00:31:15",
+    "minDelay": "00:25:00"
+  }
+]

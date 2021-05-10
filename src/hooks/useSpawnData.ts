@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import usePrevious from '../hooks/usePrevious'
 import useUrlQueries from '../hooks/useUrlQueries'
 
-import feluccaSpawns from '../spawns/felucca.json'
+import feluccaSpawns from '../spawns/shalanaar.json'
 
 function filterSpawnData(setSpawnData: any, params: any, spawnData: any[]) {
   const creatureTypes = params['creature-type']?.split(',') ?? []

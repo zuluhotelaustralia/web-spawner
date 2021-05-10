@@ -12,13 +12,13 @@ interface Props {
 const Map: FC<Props> = ({ spawnData }) => {
   const bounds: LatLngTuple[] = [
     [0, 0],
-    [-4096, 6144],
+    [-16384, 28512],
   ]
 
   return (
     <MapContainer
       center={[-2722, 1892]}
-      zoom={0}
+      zoom={1}
       crs={window.L.CRS.Simple}
       maxBounds={bounds}
       style={{
@@ -29,12 +29,12 @@ const Map: FC<Props> = ({ spawnData }) => {
       }}
     >
       <TileLayer
-        url="https://s3.eu-central-1.amazonaws.com/staging.taskdropper.com/maps/Felucca/{z}/{x}/{y}.png"
+        url="https://s3.eu-central-1.amazonaws.com/staging.taskdropper.com/maps/Shalanaar/{z}/{y}/{x}.jpg"
         minZoom={-3}
-        maxNativeZoom={1}
-        maxZoom={3}
+        maxNativeZoom={2}
+        maxZoom={4}
         tileSize={window.L.point(256, 256)}
-        zoomOffset={0}
+        zoomOffset={5}
         noWrap={true}
         bounds={bounds}
       />
