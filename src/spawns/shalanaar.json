@@ -1,7 +1,7 @@
 [
   {
     "type": "Spawner",
-    "location": [2799, 2310, 0],
+    "location": [2790, 2316, 0],
     "map": "Shalanaar",
     "count": 11,
     "entries": [

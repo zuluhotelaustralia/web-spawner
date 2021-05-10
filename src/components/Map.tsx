@@ -1,6 +1,6 @@
 import { LatLngTuple } from 'leaflet'
-import { FC } from 'react'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { FC, useState } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
@@ -14,6 +14,8 @@ const Map: FC<Props> = ({ spawnData }) => {
     [0, 0],
     [-16384, 28512],
   ]
+
+  const [selectedSpawn, setSelectedSpawn] = useState<any>()
 
   return (
     <MapContainer
@@ -42,9 +44,12 @@ const Map: FC<Props> = ({ spawnData }) => {
         {spawnData.map((spawn: any, index: number) => (
           <Marker
             key={index}
-            position={[-spawn.location[1], spawn.location[0]]}
+            position={[-spawn.location[1] - 1, spawn.location[0] - 2]}
           >
-            <Popup>
+            <Popup
+              onOpen={() => setSelectedSpawn(spawn)}
+              onClose={() => setSelectedSpawn(null)}
+            >
               <p>
                 <b>Num Entries: {spawn.count}</b>
               </p>
@@ -76,6 +81,16 @@ const Map: FC<Props> = ({ spawnData }) => {
           </Marker>
         ))}
       </MarkerClusterGroup>
+      {selectedSpawn ? (
+        <Circle
+          center={[
+            -selectedSpawn.location[1] - 1,
+            selectedSpawn.location[0] - 2,
+          ]}
+          pathOptions={{ fillColor: 'blue' }}
+          radius={selectedSpawn.homeRange}
+        />
+      ) : null}
     </MapContainer>
   )
 }
