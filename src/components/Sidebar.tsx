@@ -1,4 +1,4 @@
-import { Dispatch, FC } from 'react'
+import { Dispatch, FC, useRef } from 'react'
 import Select from 'react-select'
 import { saveAs } from 'file-saver'
 import useUrlQueries from '../hooks/useUrlQueries'
@@ -52,14 +52,16 @@ const Sidebar: FC<Props> = ({ spawnData, setSpawnData }) => {
       <button
         type="button"
         onClick={async () => {
-          const content = JSON.stringify(spawnData)
+          const content = localStorage.getItem('shandalaarSpawns')
           const filename = 'shandalaar.json'
 
-          const blob = new Blob([content], {
-            type: 'application/json;charset=utf-8',
-          })
+          if (content) {
+            const blob = new Blob([content], {
+              type: 'application/json;charset=utf-8',
+            })
 
-          saveAs(blob, filename)
+            saveAs(blob, filename)
+          }
         }}
         className="inline-flex justify-center ml-2 mt-2 mb-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >

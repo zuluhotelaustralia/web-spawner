@@ -61,18 +61,28 @@ const CrudSpawnData: FC<Props> = ({ spawnData, updateSpawnData, onCancel }) => {
     name: 'entries',
   })
 
-  const onSubmit = (data: Inputs) => {
+  const onSubmit = (data: any) => {
     updateSpawnData({
       ...spawnData,
-      count: data.entries.length,
+      count: data.entries.reduce(
+        (acc: any, curr: any) => acc + parseInt(curr.maxCount, 10),
+        0,
+      ),
       type: data.spawnType.value,
-      location: [data.locationX, data.locationY, data.locationZ],
-      homeRange: data.homeRange,
-      walkingRange: data.walkingRange,
-      minDelay: data.minDelay,
-      maxDelay: data.maxDelay,
-      entries: data.entries.map((entry) => ({
-        ...entry,
+      location: [
+        parseInt(data.locationX, 10),
+        parseInt(data.locationY, 10),
+        parseInt(data.locationZ, 10),
+      ],
+      homeRange: parseInt(data.homeRange, 10),
+      walkingRange: parseInt(data.walkingRange, 10),
+      minDelay:
+        data.minDelay.length === 5 ? `${data.minDelay}:00` : data.minDelay,
+      maxDelay:
+        data.maxDelay.length === 5 ? `${data.maxDelay}:00` : data.maxDelay,
+      entries: data.entries.map((entry: any) => ({
+        maxCount: parseInt(entry.maxCount, 10),
+        probability: parseInt(entry.probability, 10),
         name: entry.name.value,
       })),
     })

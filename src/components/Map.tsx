@@ -89,7 +89,6 @@ const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
               key={index}
               position={[-spawn.location[1] - 1, spawn.location[0] - 2]}
             >
-              {console.log('here')}
               <Popup
                 onOpen={() => {
                   setSelectedSpawn(spawn)
