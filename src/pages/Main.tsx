@@ -4,15 +4,15 @@ import Sidebar from '../components/Sidebar'
 import useSpawnData from '../hooks/useSpawnData'
 
 const Main: FC = () => {
-  const { spawnData, defaultSpawnData } = useSpawnData()
+  const { spawnData, setSpawnData, defaultSpawnData } = useSpawnData()
 
   return (
     <div className="flex">
       <div className="w-72 p-2">
-        <Sidebar spawnData={defaultSpawnData} />
+        <Sidebar setSpawnData={setSpawnData} spawnData={defaultSpawnData} />
       </div>
       <div className="flex-1">
-        <Map spawnData={spawnData} />
+        <Map setSpawnData={setSpawnData} spawnData={spawnData} />
       </div>
     </div>
   )

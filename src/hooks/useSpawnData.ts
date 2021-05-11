@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import usePrevious from '../hooks/usePrevious'
 import useUrlQueries from '../hooks/useUrlQueries'
 
-import feluccaSpawns from '../spawns/shalanaar.json'
+const shandalaarSpawns: any = JSON.parse(
+  localStorage.getItem('shandalaarSpawns') ?? '[]',
+)
 
 function filterSpawnData(setSpawnData: any, params: any, spawnData: any[]) {
   const creatureTypes = params['creature-type']?.split(',') ?? []
@@ -34,7 +36,7 @@ function filterSpawnData(setSpawnData: any, params: any, spawnData: any[]) {
       }),
     )
   } else {
-    setSpawnData(feluccaSpawns)
+    setSpawnData(shandalaarSpawns)
   }
 }
 
@@ -45,19 +47,25 @@ export default function useSpawnData() {
   })
   const paramsString = JSON.stringify(params)
   const prevParamsString = usePrevious(paramsString)
+  const stringifiedSpawnData = JSON.stringify(spawnData)
 
   useEffect(() => {
     if (paramsString !== prevParamsString) {
-      filterSpawnData(setSpawnData, params, feluccaSpawns)
+      filterSpawnData(setSpawnData, params, shandalaarSpawns)
     }
   }, [params, prevParamsString, paramsString])
 
   useEffect(() => {
-    filterSpawnData(setSpawnData, params, feluccaSpawns)
+    filterSpawnData(setSpawnData, params, shandalaarSpawns)
   }, [])
 
+  useEffect(() => {
+    localStorage.setItem('shandalaarSpawns', stringifiedSpawnData)
+  }, [stringifiedSpawnData])
+
   return {
+    setSpawnData,
     spawnData,
-    defaultSpawnData: feluccaSpawns,
+    defaultSpawnData: shandalaarSpawns,
   }
 }

@@ -1,13 +1,15 @@
-import { FC } from 'react'
+import { Dispatch, FC } from 'react'
 import Select from 'react-select'
+import { saveAs } from 'file-saver'
 import useUrlQueries from '../hooks/useUrlQueries'
 import { getCreatureTypes } from '../utils/spawn'
 
 interface Props {
   spawnData: any[]
+  setSpawnData: Dispatch<any>
 }
 
-const Sidebar: FC<Props> = ({ spawnData }) => {
+const Sidebar: FC<Props> = ({ spawnData, setSpawnData }) => {
   const creatureTypes = getCreatureTypes(spawnData)
   const creatureTypeOptions = Object.entries(creatureTypes).map(
     ([key, value]) => ({
@@ -29,6 +31,40 @@ const Sidebar: FC<Props> = ({ spawnData }) => {
 
   return (
     <div>
+      <button
+        type="button"
+        onClick={async () => {
+          const [fileHandle] = await (window as any).showOpenFilePicker({
+            description: 'Spawn data json file',
+            accept: {
+              'application/json': ['.json'],
+            },
+          })
+          const file = await fileHandle.getFile()
+          const contents = await file.text()
+          const jsonContents = JSON.parse(contents)
+          setSpawnData(jsonContents)
+        }}
+        className="inline-flex justify-center mt-2 mb-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        Import
+      </button>
+      <button
+        type="button"
+        onClick={async () => {
+          const content = JSON.stringify(spawnData)
+          const filename = 'shandalaar.json'
+
+          const blob = new Blob([content], {
+            type: 'application/json;charset=utf-8',
+          })
+
+          saveAs(blob, filename)
+        }}
+        className="inline-flex justify-center ml-2 mt-2 mb-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        Export
+      </button>
       <h2 className="text-base font-medium">Filters</h2>
       <div className="mt-2">
         <Select
