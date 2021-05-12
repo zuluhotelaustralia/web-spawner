@@ -1,16 +1,10 @@
 import { LatLngTuple } from 'leaflet'
-import { Dispatch, FC, useState, useMemo } from 'react'
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Circle,
-  useMapEvents,
-} from 'react-leaflet'
+import { Dispatch, FC, useState, useCallback, useMemo } from 'react'
+import { MapContainer, TileLayer, Circle, useMapEvents } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import CrudSpawnData from './CrudSpawnData'
+import MapMarker from './MapMarker'
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
 
@@ -26,7 +20,11 @@ const MapEvents: FC<Props> = ({ spawnData, setSpawnData }) => {
         ...spawnData,
         {
           type: 'Spawner',
-          location: [latlng.lng + 2, -1 * latlng.lat + 1, 0],
+          location: [
+            Math.floor(latlng.lng) + 2,
+            Math.floor(-1 * latlng.lat) + 1,
+            0,
+          ],
           map: 'Shandalaar',
           count: 0,
           entries: [],
@@ -58,6 +56,27 @@ const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
     [spawnData, selectedSpawn],
   )
 
+  const handleSpawnUpdate = useCallback(
+    (newSpawnDatum, spawnIndex) => {
+      setSpawnData([
+        ...spawnData.slice(0, spawnIndex),
+        newSpawnDatum,
+        ...spawnData.slice(spawnIndex + 1),
+      ])
+    },
+    [spawnData, setSpawnData],
+  )
+
+  const handleSpawnDelete = useCallback(
+    (spawnIndex) => {
+      setSpawnData([
+        ...spawnData.slice(0, spawnIndex),
+        ...spawnData.slice(spawnIndex + 1),
+      ])
+    },
+    [spawnData, setSpawnData],
+  )
+
   return (
     <>
       <MapContainer
@@ -85,66 +104,15 @@ const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
         />
         <MarkerClusterGroup>
           {spawnData.map((spawn: any, index: number) => (
-            <Marker
+            <MapMarker
               key={index}
-              position={[-spawn.location[1] - 1, spawn.location[0] - 2]}
-            >
-              <Popup
-                onOpen={() => {
-                  setSelectedSpawn(spawn)
-                  //setSelectedSpawnIndex(index)
-                }}
-                onClose={() => {
-                  setSelectedSpawn(null)
-                  //setSelectedSpawnIndex(-1)
-                }}
-              >
-                <p>
-                  <b>Num Entries: {spawn.count}</b>
-                </p>
-                <p>
-                  <b>Home Range: {spawn.homeRange}</b>
-                </p>
-                <p>
-                  <b>Walking Range: {spawn.walkingRange}</b>
-                </p>
-                <table className="table-auto">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Max Count</th>
-                      <th>Probability</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {spawn.entries.map((entry: any, index: number) => (
-                      <tr key={index}>
-                        <td>{entry.name}</td>
-                        <td>{entry.maxCount}</td>
-                        <td>{entry.probability}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <button
-                  onClick={() => setShowEditSpawnData(true)}
-                  className="mt-2 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => {
-                    setSpawnData([
-                      ...spawnData.slice(0, selectedSpawnIndex),
-                      ...spawnData.slice(selectedSpawnIndex + 1),
-                    ])
-                  }}
-                  className="mt-2 ml-2 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Delete
-                </button>
-              </Popup>
-            </Marker>
+              index={index}
+              spawn={spawn}
+              setSelectedSpawn={setSelectedSpawn}
+              setShowEditSpawnData={setShowEditSpawnData}
+              onDelete={handleSpawnDelete}
+              onUpdate={handleSpawnUpdate}
+            />
           ))}
         </MarkerClusterGroup>
         {selectedSpawn ? (
@@ -160,14 +128,9 @@ const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
       </MapContainer>
       {showEditSpawnData && (
         <CrudSpawnData
-          updateSpawnData={(newSpawnDatum) => {
-            setSpawnData([
-              ...spawnData.slice(0, selectedSpawnIndex),
-              newSpawnDatum,
-              ...spawnData.slice(selectedSpawnIndex + 1),
-            ])
-          }}
-          spawnData={selectedSpawn}
+          selectedSpawnIndex={selectedSpawnIndex}
+          updateSpawnData={handleSpawnUpdate}
+          selectedSpawn={selectedSpawn}
           onCancel={() => setShowEditSpawnData(false)}
         />
       )}

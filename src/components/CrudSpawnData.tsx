@@ -6,8 +6,9 @@ import creatureTypes from '../data/creatureTypes.json'
 import Modal from './Modal'
 
 interface Props {
-  spawnData: any
-  updateSpawnData: (spawnData: any) => void
+  selectedSpawn: any
+  selectedSpawnIndex: number
+  updateSpawnData: (selectedSpawn: any, spawnIndex: number) => void
   onCancel: () => void
 }
 
@@ -29,25 +30,30 @@ interface Inputs {
   entries: Entry[]
 }
 
-const CrudSpawnData: FC<Props> = ({ spawnData, updateSpawnData, onCancel }) => {
+const CrudselectedSpawn: FC<Props> = ({
+  selectedSpawn,
+  selectedSpawnIndex,
+  updateSpawnData,
+  onCancel,
+}) => {
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
-    ...(spawnData
+    ...(selectedSpawn
       ? {
           defaultValues: {
-            spawnType: { label: spawnData.type, value: spawnData.type },
-            locationX: spawnData.location[0],
-            locationY: spawnData.location[1],
-            locationZ: spawnData.location[2],
-            homeRange: spawnData.homeRange,
-            walkingRange: spawnData.walkingRange,
-            minDelay: spawnData.minDelay,
-            maxDelay: spawnData.maxDelay,
-            entries: spawnData.entries.map((entry: any) => ({
+            spawnType: { label: selectedSpawn.type, value: selectedSpawn.type },
+            locationX: selectedSpawn.location[0],
+            locationY: selectedSpawn.location[1],
+            locationZ: selectedSpawn.location[2],
+            homeRange: selectedSpawn.homeRange,
+            walkingRange: selectedSpawn.walkingRange,
+            minDelay: selectedSpawn.minDelay,
+            maxDelay: selectedSpawn.maxDelay,
+            entries: selectedSpawn.entries.map((entry: any) => ({
               ...entry,
               name: { label: entry.name, value: entry.name },
             })),
@@ -62,30 +68,33 @@ const CrudSpawnData: FC<Props> = ({ spawnData, updateSpawnData, onCancel }) => {
   })
 
   const onSubmit = (data: any) => {
-    updateSpawnData({
-      ...spawnData,
-      count: data.entries.reduce(
-        (acc: any, curr: any) => acc + parseInt(curr.maxCount, 10),
-        0,
-      ),
-      type: data.spawnType.value,
-      location: [
-        parseInt(data.locationX, 10),
-        parseInt(data.locationY, 10),
-        parseInt(data.locationZ, 10),
-      ],
-      homeRange: parseInt(data.homeRange, 10),
-      walkingRange: parseInt(data.walkingRange, 10),
-      minDelay:
-        data.minDelay.length === 5 ? `${data.minDelay}:00` : data.minDelay,
-      maxDelay:
-        data.maxDelay.length === 5 ? `${data.maxDelay}:00` : data.maxDelay,
-      entries: data.entries.map((entry: any) => ({
-        maxCount: parseInt(entry.maxCount, 10),
-        probability: parseInt(entry.probability, 10),
-        name: entry.name.value,
-      })),
-    })
+    updateSpawnData(
+      {
+        ...selectedSpawn,
+        count: data.entries.reduce(
+          (acc: any, curr: any) => acc + parseInt(curr.maxCount, 10),
+          0,
+        ),
+        type: data.spawnType.value,
+        location: [
+          parseInt(data.locationX, 10),
+          parseInt(data.locationY, 10),
+          parseInt(data.locationZ, 10),
+        ],
+        homeRange: parseInt(data.homeRange, 10),
+        walkingRange: parseInt(data.walkingRange, 10),
+        minDelay:
+          data.minDelay.length === 5 ? `${data.minDelay}:00` : data.minDelay,
+        maxDelay:
+          data.maxDelay.length === 5 ? `${data.maxDelay}:00` : data.maxDelay,
+        entries: data.entries.map((entry: any) => ({
+          maxCount: parseInt(entry.maxCount, 10),
+          probability: parseInt(entry.probability, 10),
+          name: entry.name.value,
+        })),
+      },
+      selectedSpawnIndex,
+    )
     onCancel()
   }
 
@@ -312,4 +321,4 @@ const CrudSpawnData: FC<Props> = ({ spawnData, updateSpawnData, onCancel }) => {
   )
 }
 
-export default CrudSpawnData
+export default CrudselectedSpawn
