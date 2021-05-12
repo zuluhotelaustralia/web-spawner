@@ -77,6 +77,23 @@ const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
     [spawnData, setSpawnData],
   )
 
+  const handleSpawnDupe = useCallback(
+    (spawnIndex) => {
+      setSpawnData([
+        ...spawnData,
+        {
+          ...spawnData[spawnIndex],
+          location: [
+            spawnData[spawnIndex].location[0] + 30,
+            spawnData[spawnIndex].location[1],
+            spawnData[spawnIndex].location[2],
+          ],
+        },
+      ])
+    },
+    [spawnData, setSpawnData],
+  )
+
   return (
     <>
       <MapContainer
@@ -111,6 +128,7 @@ const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
               setSelectedSpawn={setSelectedSpawn}
               setShowEditSpawnData={setShowEditSpawnData}
               onDelete={handleSpawnDelete}
+              onDupe={handleSpawnDupe}
               onUpdate={handleSpawnUpdate}
             />
           ))}

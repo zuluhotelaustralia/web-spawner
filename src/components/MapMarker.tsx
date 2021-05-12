@@ -9,6 +9,7 @@ interface Props {
   setSelectedSpawn: Dispatch<any>
   setShowEditSpawnData: Dispatch<boolean>
   onDelete: (spawnIndex: number) => void
+  onDupe: (spawnIndex: number) => void
   onUpdate: (newSpawnDatum: any, spawnIndex: number) => void
 }
 
@@ -18,6 +19,7 @@ const MapMarker: FC<Props> = ({
   setSelectedSpawn,
   setShowEditSpawnData,
   onDelete,
+  onDupe,
   onUpdate,
 }) => {
   const [draggable, setDraggable] = useState<boolean>(false)
@@ -96,15 +98,21 @@ const MapMarker: FC<Props> = ({
         </button>
         <button
           onClick={() => setShowEditSpawnData(true)}
-          className="mt-2 ml-2 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="mt-2 ml-1 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Edit
         </button>
         <button
           onClick={() => onDelete(index)}
-          className="mt-2 ml-2 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="mt-2 ml-1 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Delete
+        </button>
+        <button
+          onClick={() => onDupe(index)}
+          className="mt-2 ml-1 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Dupe
         </button>
       </Popup>
     </Marker>
