@@ -22,7 +22,6 @@ const MapMarker: FC<Props> = ({
   onDupe,
   onUpdate,
 }) => {
-  const [draggable, setDraggable] = useState<boolean>(false)
   const markerRef = useRef<any>(null)
 
   const eventHandlers = useMemo(
@@ -51,7 +50,7 @@ const MapMarker: FC<Props> = ({
   return (
     <Marker
       ref={markerRef}
-      draggable={draggable}
+      draggable
       eventHandlers={eventHandlers}
       position={[-spawn.location[1] - 1, spawn.location[0] - 2]}
     >
@@ -91,12 +90,6 @@ const MapMarker: FC<Props> = ({
           </tbody>
         </table>
         <button
-          onClick={() => setDraggable((prev) => !prev)}
-          className="mt-2 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Toggle Draggable
-        </button>
-        <button
           onClick={() => setShowEditSpawnData(true)}
           className="mt-2 ml-1 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
@@ -110,7 +103,7 @@ const MapMarker: FC<Props> = ({
         </button>
         <button
           onClick={() => onDupe(index)}
-          className="mt-2 ml-1 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="mt-2 ml-1 inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Dupe
         </button>
