@@ -14,18 +14,14 @@ interface Props {
 }
 
 const MapEvents: FC<Props> = ({ spawnData, setSpawnData }) => {
-  const map = useMapEvents({
+  useMapEvents({
     dblclick: ({ latlng }) => {
       setSpawnData([
         ...spawnData,
         {
           type: 'Spawner',
-          location: [
-            Math.floor(latlng.lng) + 2,
-            Math.floor(-1 * latlng.lat) + 1,
-            0,
-          ],
-          map: 'Shandalaar',
+          location: [Math.floor(latlng.lng), Math.floor(-1 * latlng.lat), 0],
+          map: 'Felucca',
           count: 0,
           entries: [],
           homeRange: 1,
@@ -42,7 +38,7 @@ const MapEvents: FC<Props> = ({ spawnData, setSpawnData }) => {
 const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
   const bounds: LatLngTuple[] = [
     [0, 0],
-    [-16384, 28512],
+    [-4096, 6144],
   ]
 
   const [selectedSpawn, setSelectedSpawn] = useState<any>()
@@ -97,7 +93,7 @@ const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
   return (
     <>
       <MapContainer
-        center={[-2722, 1892]}
+        center={[-1693, 1439]}
         zoom={1}
         crs={window.L.CRS.Simple}
         maxBounds={bounds}
@@ -110,12 +106,12 @@ const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
       >
         <MapEvents spawnData={spawnData} setSpawnData={setSpawnData} />
         <TileLayer
-          url="https://s3.eu-central-1.amazonaws.com/staging.taskdropper.com/maps/Shalanaar/{z}/{y}/{x}.jpg"
+          url="https://s3.eu-central-1.amazonaws.com/staging.taskdropper.com/maps/Felucca/{z}/{x}/{y}.png"
           minZoom={-3}
-          maxNativeZoom={2}
+          maxNativeZoom={1}
           maxZoom={4}
           tileSize={window.L.point(256, 256)}
-          zoomOffset={5}
+          zoomOffset={0}
           noWrap={true}
           bounds={bounds}
         />
@@ -135,10 +131,7 @@ const Map: FC<Props> = ({ spawnData, setSpawnData }) => {
         </MarkerClusterGroup>
         {selectedSpawn ? (
           <Circle
-            center={[
-              -selectedSpawn.location[1] - 1,
-              selectedSpawn.location[0] - 2,
-            ]}
+            center={[-selectedSpawn.location[1], selectedSpawn.location[0]]}
             pathOptions={{ fillColor: 'blue' }}
             radius={selectedSpawn.homeRange}
           />
